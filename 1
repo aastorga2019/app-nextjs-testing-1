@@ -1,0 +1,598 @@
+# Uso de climne AI - 29oct26
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+#    IdentityFile ~/.ssh/id_ed25519
+
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+#    IdentityFile ~/.ssh/id_rsa
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+    UseKeychain yes
+
+Host enzo
+#  HostName enzo.globant.com
+  HostName enzo.corp.globant.com
+#  User a.astorga
+#  KexAlgorithms +diffie-hellman-group1-sha1
+  IdentityFile ~/.ssh/starmeup
+
+# Globant example configuration
+Host devs2db-useast1-qa
+    HostName 172.30.142.13
+    ProxyJump enzo
+    User a.astorga
+    IdentityFile ~/.ssh/starmeup
+
+# Globant Jenkins      
+#-----------------------
+Host smu-jenkins-foo
+  HostName asta014dxu01.glx.corp.globant.com
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+
+Host jenkins-migrated
+  HostName asta014dxu02.eqx.corp.globant.com
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+
+Host jenkins-alma
+  HostName nglb789dxu04.eqx.corp.globant.com
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+
+Host smu-jenkins-new
+  #HostName 10.28.2.210
+  HostName 10.54.2.158
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+
+Host smu-jenkins
+  HostName 10.1.3.103
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+
+#Nodes are set with  NFS - jenkins1 20ene26
+Host smu-jenkins-node1
+ Hostname 10.54.128.81
+ ProxyJump enzo
+
+# jenkins1 30ene26
+Host smu-jenkins-node2
+  Hostname 10.54.128.102
+ ProxyJump enzo
+
+# jenkins2 - 30ene26 - NODE3
+Host smu-jenkins-node3
+  Hostname 10.54.128.99
+ ProxyJump enzo
+
+# jenkins2 - 30ene26 - NODE 1 - ???
+Host node2-jenkins
+ Hostname nsta014dxu06.eqx.corp.globant.com
+ ProxyJump enzo
+
+# jenkins2 - 30ene26 - SLAVE1 - NODE1 - ok
+Host node1-jenkins2
+ Hostname nsta014dxu07.eqx.corp.globant.com
+ ProxyJump enzo
+
+# jenkins2 - 16feb26 - SLAVE3 - NODE3 - ok
+Host node3-jenkins2
+ Hostname nsta014dxu08.eqx.corp.globant.com
+ ProxyJump enzo
+
+#---------------------------------
+# smu-devs2db & devs2db-useast1
+#---------------------------------
+Host smu-devs2db-*
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-devs2db-uat
+  HostName 10.17.11.244
+Host smu-devs2db-prod
+#  HostName 18.235.94.250
+#  ProxyCommand ssh -W %h:%p 10.5.4.169
+  HostName 10.1.3.99
+Host smu-devs2db-irlanda-prod
+  HostName 34.240.220.182
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host devs2db-useast1-*
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host devs2db-useast1-qa
+  HostName devs2db-useast1-qa.starmeup.com
+#---------------------------------
+#  smu-bastions
+#---------------------------------
+# Bastion QA
+Host smu-bastion-qa
+  HostName 172.30.142.13
+  ProxyCommand ssh -W %h:%p enzo
+#  ProxyCommand ssh -W %h:%p smu-bastion-ng-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+# Bastion PROD
+Host smu-bastion-1a
+  HostName 10.1.3.92
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-bastion-ng-1a
+  HostName 10.1.3.195
+ # HostName 10.5.4.169 ----just if needed to use privatelink globant
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host globant-priv-prod
+HostName 10.5.4.169
+ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+# Pentaho
+#---------------------------
+Host smu-pentaho-prod
+  HostName 10.1.0.62
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-pentaho-qa
+  HostName 10.0.4.17
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-pentaho-uat
+  HostName 10.17.13.184
+  ProxyCommand ssh -W %h:%p smu-devs2db-uat
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-pentaho-dev
+  HostName 10.0.3.90
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-pentaho-eu
+  HostName 10.0.50.9
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-pentaho-eu-new
+  HostName 10.0.3.39
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#-----------------------
+# SMU AWS               
+#-----------------------
+Host smu-prod-* smu-reverse-proxy smu-npm smu-rundeck smu-metabase smu-os-accounts-useast1-dev smu-uat-*
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-uat-1a
+  HostName 10.1.0.29
+Host smu-uat-1b
+  HostName 10.1.4.32
+Host smu-prod-1a
+  HostName prod-1a.smu.local
+Host smu-prod-1b
+  HostName prod-1b.smu.local
+Host smu-prod-2a
+  HostName prod-2a.smu.local
+Host smu-prod-2b
+  HostName prod-2b.smu.local
+Host smu-prod-3a
+  HostName prod-3a.smu.local
+Host smu-prod-3b
+  HostName prod-3b.smu.local
+Host smu-prod-4a
+  HostName prod-4a.smu.local
+Host smu-prod-4b
+  HostName prod-4b.smu.local
+#-----------------------
+# SMU  npm      
+#-----------------------
+Host smu-npm
+  HostName 10.1.3.39
+#-----------------------
+# SMU  RUNDECK      
+#-----------------------
+Host smu-rundeck
+ HostName 10.1.0.34
+ ProxyJump smu-bastion-ng-1a
+ User a.astorga
+ IdentityFile ~/.ssh/starmeup
+#-----------------------
+# SMU  METABASE      
+#-----------------------
+Host smu-metabase
+  Hostname 10.1.0.21
+Host smu-os-accounts-useast1-dev
+  Hostname 10.1.3.198
+#---------------------------
+#  smu logs
+#---------------------------
+Host smu-qa smu-logs smu-graylog
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-qa
+  HostName 10.1.3.131
+Host smu-logs
+  HostName 10.1.0.130
+Host smu-graylog
+  HostName 10.1.7.57
+#---------------------------------
+#  smu-starmeup-jobs
+#---------------------------------
+#Same machine as smu-aws-bastion-qa but using private address
+Host smu-starmeup-jobs-dev
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+  Hostname 10.0.1.84
+#  Hostname 34.242.158.120
+  Hostname 10.0.1.174
+#---------------------------------
+#  Reverse-proxy 
+#---------------------------------
+Host smu-reverse-proxy-qa
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+  Hostname 10.0.1.5
+Host smu-reverse-proxy-uat
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#  Hostname 10.17.11.81
+  Hostname 3.214.50.90
+Host smu-reverse-proxy
+  Hostname 10.1.3.224
+Host smu-reverse-proxy-eu
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------------
+#  smu-mongodb
+#---------------------------------
+Host smu-mongodb-useast1-qa
+  HostName 10.0.4.236
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-mongodb-useast1-prod
+  HostName 10.1.4.149
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------------
+#  Bastion Irlanda PROD
+#---------------------------------
+Host smu-bastion-irlanda-prod
+  HostName 54.76.111.204
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#Host smu-orientdb-eu
+#  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+#  User a.astorga
+#  IdentityFile ~/.ssh/starmeup
+#  Hostname 10.0.3.106
+# DIC-21-2023 Connection out
+# No host in SMU AWS
+Host smu-orientdb-eu
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+  Hostname 10.0.3.208
+Host smu-irlanda-prod*
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-irlanda-prod-1a
+  HostName 10.0.3.235
+Host smu-irlanda-prod-1b
+  HostName 10.0.4.226
+Host smu-irlanda-prod-2a
+  HostName 10.0.3.22
+Host smu-irlanda-prod-2b
+  HostName 10.0.4.139
+Host smu-irlanda-prod-3a
+  HostName 10.0.3.153
+Host smu-irlanda-prod-3b
+  HostName 10.0.4.177
+Host smu-irlanda-prod-4a
+  HostName 10.0.3.253
+Host smu-irlanda-prod-4b
+  HostName 10.0.4.126
+Host smu-irlanda-prod-5a
+  HostName 10.0.3.128
+Host smu-irlanda-prod-5b
+  HostName 10.0.4.61
+#---------------------------
+# smu-nat
+#---------------------------
+Host smu-nat-1a
+  HostName 10.1.3.108
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-nat-1b
+  HostName 10.1.7.28
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+#  smu-orientdb
+#---------------------------
+#Host smu-orientdb-uat
+#  HostName 10.17.13.94
+#  ProxyCommand ssh -W %h:%p smu-devs2db-uat
+#  User a.astorga
+#  IdentityFile ~/.ssh/starmeup
+Host smu-orientdb-uat
+  HostName 10.17.13.69
+  ProxyCommand ssh -W %h:%p smu-devs2db-uat
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-orientdb-qa
+  HostName 10.0.3.23
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-orientdb-dev
+  HostName 10.0.3.136
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-orientdb-etl-prod
+  HostName 10.1.0.186
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-orientdb-prod
+  HostName 10.1.0.59
+  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+#  ecs-useast1
+#---------------------------
+Host smu-ecs-useast1-uat-1
+  HostName 10.17.4.228
+  ProxyCommand ssh -W %h:%p smu-devs2db-uat
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-ecs-useast1-uat-2
+  HostName 10.17.4.203
+  ProxyCommand ssh -W %h:%p smu-devs2db-uat
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+#  smu-sftp
+#---------------------------
+Host smu-sftp-usa
+  Hostname 10.1.8.251
+  ProxyCommand ssh -W %h:%p smu-bastion-ng-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-sftp-eu
+  Hostname 10.0.1.51
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+#  smu-smtp
+#---------------------------
+Host smu-smtp-usa-a
+  Hostname 10.1.0.10
+  ProxyCommand ssh -W %h:%p smu-bastion-ng-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-smtp-usa-b
+  Hostname 10.1.4.8
+  ProxyCommand ssh -W %h:%p smu-bastion-ng-1a
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-smtp-eu-a
+  Hostname 10.0.3.5
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-smtp-eu-b
+  Hostname 10.0.4.129
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-be-eu-1a
+  Hostname 10.0.3.235
+  ProxyCommand ssh -W %h:%p smu-bastion-irlanda-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+#  smu-wordpress
+#---------------------------
+Host smu-wordpress-*
+#  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-wordpress-blog-qa
+#  HostName 10.1.8.62
+  ProxyCommand ssh -W %h:%p enzo
+  HostName 35.173.81.153 
+Host smu-wordpress-blog-prod
+  HostName 10.1.3.61
+  ProxyCommand ssh -W %h:%p enzo
+  #HostName 35.174.226.154
+Host smu-wordpress-customerportal-prod
+#  ProxyCommand ssh -W %h:%p smu-bastion-1a
+  ProxyCommand ssh -W %h:%p smu-bastion-ng-1a
+  HostName 10.1.3.132
+Host smu-wordpress-customerportal-qa
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+# ProxyCommand ssh -W %h:%p smu-bastion-ng-1a
+  HostName 10.0.2.214
+Host smu-aws-wp
+ HostName 10.1.3.61
+ #HostName 52.207.204.110
+ User ec2-user
+ ProxyCommand ssh -W %h:%p smu-bastion-1a
+ IdentityFile ~/.ssh/wp-prod.pem
+#---------------------------
+#  SMU GCP
+#---------------------------
+Host smu-gcp-*
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+  StrictHostKeyChecking no
+Host smu-pentaho-gcp
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-prod
+#Host smu-gcp-bastion-*
+#  ProxyJump smu-rundeck
+#
+Host smu-gcp-frontend-tomcat-*
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-walmart
+Host smu-gcp-frontend-tomcat-1
+  HostName 10.101.128.40
+Host smu-gcp-frontend-tomcat-3
+  HostName 10.101.128.234
+Host smu-gcp-etl-*
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-prod
+Host smu-gcp-etldata-dev
+  HostName 10.0.1.2
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-dev
+Host smu-gcp-etldata-qa
+  HostName 10.0.21.2
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-qa
+Host smu-gcp-etldata-uat
+  HostName 10.0.22.2
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-uat
+Host smu-gcp-orientdb-prod
+  HostName 10.101.132.30
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-walmart
+Host smu-gcp-sql-proxy-test
+  HostName 10.101.132.218
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-walmart
+Host smu-gcp-bastion-uat
+  HostName 35.206.126.208
+#Host smu-gcp-bastion-prod
+#  HostName 35.199.116.112
+Host smu-gcp-bastion-walmart
+  HostName 35.192.35.243
+Host smu-gcp-bastion-dev
+  HostName 35.224.108.167
+Host smu-gcp-bastion-qa
+  HostName 35.237.136.5
+Host smu-gcp-nat
+  HostName 10.0.0.3
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-prod
+Host smu-gcp-frontend-tomcat-2
+  HostName 10.101.128.2
+Host smu-gcp-frontend-tomcat-3
+  HostName 10.101.128.3
+Host smu-gcp-frontend-tomcat-4
+  HostName 10.101.128.4
+Host smu-gcp-frontend-tomcat-5
+  HostName 10.101.128.5
+Host smu-gcp-frontend-tomcat-6
+  HostName 10.101.128.6
+  
+Host smu-gcp-frontend-tomcat-7
+  HostName 10.101.128.7
+Host smu-gcp-frontend-tomcat-28
+  HostName 10.101.128.28
+Host smu-gcp-frontend-tomcat-35
+  HostName 10.101.128.35
+Host smu-gcp-frontend-tomcat-40
+  HostName 10.101.128.40
+Host smu-gcp-frontend-tomcat-41
+  HostName 10.101.128.41
+Host smu-gcp-etl-usa
+  HostName 10.8.32.4
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-prod
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+Host smu-gcp-etl-eu
+  HostName 35.240.15.154
+# HostName 10.132.0.2
+  ProxyCommand ssh -W %h:%p smu-gcp-bastion-prod
+Host smu-gcp-bastion-prod
+  HostName 35.224.114.122
+  ProxyCommand ssh -W %h:%p smu-aws-bastion-qa
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+#  Nexus
+#---------------------------
+#Unused nexus
+Host smu-nexus-new
+ Hostname nglob02pxu00.glx.corp.globant.com
+ ProxyJump enzo
+Host smu-sonarqube
+  HostName nsta014dxu05.sfo.corp.globant.com
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------
+#  Suricata
+#---------------------------
+Host smu-suricata
+# HostName 172.30.142.12
+ HostName 172.30.142.10
+ProxyCommand ssh -W %h:%p enzo
+#---------------------------
+#  fontanarrosa
+#---------------------------
+Host fontanarrosa
+  HostName fontanarrosa.globant.com
+#---------------------------
+#  Bastion -- Alejandro
+#---------------------------
+# Host bastion alejo qa
+Host smu-aws-bastion-qa
+  HostName 34.205.96.202
+  ProxyCommand ssh -W %h:%p enzo
+  User a.astorga
+  IdentityFile ~/.ssh/starmeup
+#---------------------------------
+#  SMU sop
+#---------------------------------
+Host smu-sop-qa
+  HostName 10.0.2.142
+  ProxyCommand ssh -W %h:%p smu-bastion-qa
+  User ubuntu
+  IdentityFile ~/.ssh/starmeup
+
+
+####################3
+# Dado Ambientes Latam Airlines 
+Host infra
+    HostName 104.198.63.250
+    IdentityFile ~/.ssh/google_compute_engine
+Host rr
+    HostName 35.202.194.69
+    IdentityFile ~/.ssh/google_compute_engine
+Host prod
+    HostName 34.30.220.89
+    IdentityFile ~/.ssh/google_compute_engine
+Host dev
+    HostName 35.245.68.73
+    IdentityFile ~/.ssh/google_compute_engine
+Host st
+    HostName 35.238.58.39
+    IdentityFile ~/.ssh/google_compute_engine
